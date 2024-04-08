@@ -6,5 +6,6 @@ public class Category
     public string Name { get; set; } = string.Empty;
     public int? ParentCategoryId { get; set; }
 
-    public Category? ParentCategory { get; set; }
+    public virtual Category? ParentCategory { get; set; }
+    public virtual List<Category> ChildCategories { get; set; } = new();
 }
