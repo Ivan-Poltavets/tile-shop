@@ -1,31 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TileShop.Application.Services.Interfaces;
 
 namespace TileShop.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class OrdersController : ControllerBase
+public class OrdersController : BaseController
 {
-    public OrdersController()
+    private readonly IOrderService _orderService;
+
+    public OrdersController(IOrderService orderService)
     {
-        
+        _orderService = orderService;
     }
 
     [HttpGet]
-    public void GetOrders()
+    public async Task<IActionResult> GetUserOrders()
     {
-
-    }
-
-    [HttpGet("{id}")]
-    public void GetOrder()
-    {
-
+        var orders = await _orderService.GetUserOrdersAsync(UserId);
+        return Ok(orders);
     }
 
     [HttpPost]
-    public void CreateOrder()
+    public async Task<IActionResult> DoCheckout()
     {
-
+        var result = await _orderService.DoCheckoutAsync(UserId);
+        return CreatedAtAction(nameof(DoCheckout), result);
     }
 }

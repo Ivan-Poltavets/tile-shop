@@ -1,5 +1,51 @@
-﻿namespace TileShop.Application.Services;
+﻿using AutoMapper;
+using TileShop.Application.Services.Interfaces;
+using TileShop.Domain.Dtos;
+using TileShop.Domain.Entities;
+using TileShop.Domain.Repositories;
 
-public class ProductService
+namespace TileShop.Application.Services;
+
+public class ProductService : IProductService
 {
+    private readonly IProductRepository _productRepository;
+    private readonly ICharacteristicsRepository _characteristicsRepository;
+    private readonly IMapper _mapper;
+
+    public ProductService(IProductRepository productRepository, IMapper mapper, ICharacteristicsRepository characteristicsRepository)
+    {
+        _productRepository = productRepository;
+        _mapper = mapper;
+        _characteristicsRepository = characteristicsRepository;
+    }
+
+    public async Task<List<ProductDto>> GetProducts()
+    {
+        var products = await _productRepository.GetByPriceIncreasing();
+        return _mapper.Map<List<ProductDto>>(products);
+    }
+
+    public async Task<ProductDto> GetByIdAsync(int id)
+    {
+        var product = await _productRepository.GetByIdAsync(id);
+        return _mapper.Map<ProductDto>(product);
+    }
+
+    public async Task<ProductDto> CreateProductAsync(ProductDto productDto)
+    {
+        var product = _mapper.Map<Product>(productDto);
+        var createdProduct = await _productRepository.CreateAsync(product);
+        return _mapper.Map<ProductDto>(createdProduct);
+    }
+
+    public async Task UpdateProductAsync(ProductDto productDto)
+    {
+        var product = _mapper.Map<Product>(productDto);
+        await _productRepository.UpdateAsync(product);
+    }
+
+    public async Task DeleteProductAsync(int id)
+    {
+        await _productRepository.DeleteAsync(id);
+    }
 }

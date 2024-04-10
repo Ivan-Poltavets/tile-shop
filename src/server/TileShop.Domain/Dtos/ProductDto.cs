@@ -1,6 +1,8 @@
-﻿namespace TileShop.Domain.Entities;
+﻿using TileShop.Domain.Entities;
 
-public class Product
+namespace TileShop.Domain.Dtos;
+
+public class ProductDto
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -10,6 +12,6 @@ public class Product
     public int CategoryId { get; set; }
     public int CharacteristicsId { get; set; }
 
-    public virtual Category Category { get; set; } = new();
-    public virtual Characteristics Characteristics { get; set; } = new();
+    public virtual Category? Category { get; set; }
+    public virtual Characteristics? Characteristics { get; set; }
 }

@@ -1,5 +1,7 @@
-﻿namespace TileShop.Application.Services;
+﻿using TileShop.Application.Services.Interfaces;
 
-public class UserService
+namespace TileShop.Application.Services;
+
+public class UserService : IUserService
 {
 }
