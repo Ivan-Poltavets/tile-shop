@@ -9,5 +9,8 @@ namespace TileShop.API.Controllers;
 [Route("api/[controller]")]
 public class BaseController : ControllerBase
 {
-    protected int UserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    protected string? UserId => 
+        User.Identity.IsAuthenticated 
+        ? User.FindFirst(ClaimTypes.NameIdentifier)!.Value
+        : null;
 }

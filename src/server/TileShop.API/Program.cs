@@ -9,7 +9,13 @@ builder.Services.AddControllers();
 builder.Services.AddServices(builder.Configuration);
 builder.Services.AddRepositories();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdmin",
+        policy => policy.RequireClaim("Role", "Administrator");
+});
 
 var app = builder.Build();
 
@@ -35,8 +41,8 @@ using(var scope = app.Services.CreateScope())
     }
 }
 
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

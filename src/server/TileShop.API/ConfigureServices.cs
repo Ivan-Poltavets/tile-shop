@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 using TileShop.API.Categories.Requests;
 using TileShop.Application.Profiles;
 using TileShop.Application.Services;
@@ -23,6 +27,8 @@ public static class ConfigureServices
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IBasketService, BasketService>();
         services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IUserService,  UserService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
     }
 
     public static void AddRepositories(this IServiceCollection services)
@@ -33,5 +39,67 @@ public static class ConfigureServices
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped<IBasketDetailsRepository, BasketDetailsRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+    }
+
+    public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+            .AddJwtBearer(options =>
+            {
+                var encodedSecret = Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]);
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(encodedSecret)
+                };
+            });
+    }
+
+    public static void AddSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("V1", new OpenApiInfo
+            {
+                Version = "V1",
+                Title = "TileShop",
+                Description = "Tile shop Web API"
+            });
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Name = "Authorization",
+                Description = "Bearer Auth with a JWT",
+                Type = SecuritySchemeType.Http
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new List<string>()
+                    }
+                });
+        });
     }
 }

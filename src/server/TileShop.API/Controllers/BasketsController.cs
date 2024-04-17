@@ -24,14 +24,14 @@ public class BasketsController : BaseController
     [HttpGet]
     public async Task<ActionResult<BasketDto>> GetUserBasket()
     {
-        var result = await _basketService.GetUserBasketAsync(UserId);
+        var result = await _basketService.GetUserBasketAsync(int.Parse(UserId));
         return Ok(result);
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateBasket()
     {
-        var result = await _basketService.CreateBasketAsync(UserId);
+        var result = await _basketService.CreateBasketAsync(int.Parse(UserId));
         return CreatedAtAction(nameof(CreateBasket), result);
     }
 
