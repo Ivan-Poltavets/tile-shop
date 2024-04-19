@@ -12,4 +12,10 @@ public class OrderDetailsRepository : BaseRepository<OrderDetails>, IOrderDetail
         
     }
 
+
+    public async Task CreateRangeAsync(List<OrderDetails> orderDetails)
+    {
+        await EntitySet.AddRangeAsync(orderDetails);
+        await Context.SaveChangesAsync();
+    }
 }

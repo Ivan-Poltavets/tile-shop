@@ -33,6 +33,11 @@ public class BasketService : IBasketService
 
     public async Task<BasketDto> CreateBasketAsync(int userId)
     {
+        var userBasket = await _basketRepository.GetByUserIdAsync(userId);
+        if(userBasket is not null)
+        {
+            throw new Exception("User basket already exist");
+        }
         var basket = new Basket { UserId = userId };
         var created = await _basketRepository.CreateAsync(basket);
         return _mapper.Map<BasketDto>(created);

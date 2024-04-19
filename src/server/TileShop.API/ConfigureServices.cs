@@ -39,6 +39,7 @@ public static class ConfigureServices
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped<IBasketDetailsRepository, BasketDetailsRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IOrderDetailsRepository, OrderDetailsRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
     }
 

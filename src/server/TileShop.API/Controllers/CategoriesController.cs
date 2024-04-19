@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TileShop.API.Categories.Requests;
 using TileShop.Application.Services.Interfaces;
@@ -26,6 +27,7 @@ public class CategoriesController : ControllerBase
         return Ok(categories);
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     [HttpPost]
     public async Task<IActionResult> CreateCategory(CreateCategoryRequest request)
     {
@@ -34,6 +36,7 @@ public class CategoriesController : ControllerBase
         return CreatedAtAction(nameof(CreateCategory), createdCategory);
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     [HttpPut]
     public async Task<IActionResult> UpdateCategory(UpdateCategoryRequest request)
     {
@@ -42,6 +45,7 @@ public class CategoriesController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCategory(int id)
     {

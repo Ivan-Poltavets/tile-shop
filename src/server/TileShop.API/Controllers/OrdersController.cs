@@ -19,14 +19,14 @@ public class OrdersController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetUserOrders()
     {
-        var orders = await _orderService.GetUserOrdersAsync(UserId);
+        var orders = await _orderService.GetUserOrdersAsync(int.Parse(UserId));
         return Ok(orders);
     }
 
     [HttpPost]
     public async Task<IActionResult> DoCheckout()
     {
-        var result = await _orderService.DoCheckoutAsync(UserId);
+        var result = await _orderService.DoCheckoutAsync(int.Parse(UserId));
         return CreatedAtAction(nameof(DoCheckout), result);
     }
 }

@@ -11,12 +11,14 @@ public class OrderService : IOrderService
     private readonly IBasketService _basketService;
     private readonly IOrderRepository _orderRepository;
     private readonly IMapper _mapper;
+    private readonly IOrderDetailsRepository _orderDetailsRepository;
 
-    public OrderService(IBasketService basketService, IOrderRepository orderRepository, IMapper mapper)
+    public OrderService(IBasketService basketService, IOrderRepository orderRepository, IMapper mapper, IOrderDetailsRepository orderDetailsRepository)
     {
         _basketService = basketService;
         _orderRepository = orderRepository;
         _mapper = mapper;
+        _orderDetailsRepository = orderDetailsRepository;
     }
 
     public async Task<List<OrderDto>> GetUserOrdersAsync(int userId)
@@ -37,10 +39,12 @@ public class OrderService : IOrderService
         var order = new Order
         {
             CreatedDate = DateTime.UtcNow,
-            UserId = userId,
-            Details = orderDetails
+            UserId = userId
         };
         var createdOrder = await _orderRepository.CreateAsync(order);
+        orderDetails.ForEach(x => x.OrderId = createdOrder.Id);
+        await _orderDetailsRepository.CreateRangeAsync(orderDetails);
+        await _basketService.DeleteAllBasketItemsAsync(basket.Id);
         return _mapper.Map<OrderDto>(createdOrder);
     }
 }

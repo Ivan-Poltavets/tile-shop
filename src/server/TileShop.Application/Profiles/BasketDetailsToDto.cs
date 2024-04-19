@@ -8,6 +8,6 @@ public class BasketDetailsToDto : Profile
 {
     public BasketDetailsToDto()
     {
-        CreateMap<BasketDetailsDto, BasketDetails>();
+        CreateMap<BasketDetails, BasketDetailsDto>().ReverseMap();
     }
 }

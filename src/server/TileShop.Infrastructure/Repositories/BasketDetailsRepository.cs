@@ -16,6 +16,7 @@ public class BasketDetailsRepository : BaseRepository<BasketDetails>, IBasketDet
     {
         var basketDetails = await EntitySet
             .Where(x => x.BasketId == id)
+            .Include(x => x.Product)
             .AsNoTracking()
             .ToListAsync();
 

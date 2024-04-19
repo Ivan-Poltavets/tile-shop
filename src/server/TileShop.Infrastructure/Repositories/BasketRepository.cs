@@ -16,6 +16,7 @@ namespace TileShop.Infrastructure.Repositories
         {
             var basket = await EntitySet
                 .Include(x => x.Items)
+                .ThenInclude(x => x.Product)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserId == userId);
 

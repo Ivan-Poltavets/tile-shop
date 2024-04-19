@@ -1,6 +1,6 @@
-﻿namespace TileShop.API.Controllers.Users.Requests;
+﻿namespace TileShop.API.Users.Requests;
 
-public class CreateUserRequest
+public class UpdateUserRequest
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

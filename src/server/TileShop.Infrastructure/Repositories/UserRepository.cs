@@ -14,7 +14,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
     public async Task<User?> GetByLoginAsync(string login)
     {
-        var user = await EntitySet.FirstOrDefaultAsync(x => x.PhoneNumber == login);
+        var user = await EntitySet.FirstOrDefaultAsync(x => x.PhoneNumber == login || x.Email == login);
 
         return user;
     }

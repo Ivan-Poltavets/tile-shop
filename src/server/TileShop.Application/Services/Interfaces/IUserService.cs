@@ -1,4 +1,5 @@
 ﻿using TileShop.Domain.Dtos;
+using TileShop.Domain.Entities;
 
 namespace TileShop.Application.Services.Interfaces;
 

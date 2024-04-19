@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TileShop.API.Products.Requests;
 using TileShop.Application.Services.Interfaces;
@@ -33,6 +34,7 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     [HttpPost]
     public async Task<IActionResult> CreateProduct(CreateProductRequest request)
     {
@@ -41,6 +43,7 @@ public class ProductsController : ControllerBase
         return CreatedAtAction(nameof(CreateProduct), created);
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     [HttpPut]
     public async Task<IActionResult> UpdateProduct(UpdateProductRequest request)
     {
@@ -49,6 +52,7 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(int id)
     {

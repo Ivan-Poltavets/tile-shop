@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TileShop.API.Controllers.Users.Requests;
+using TileShop.API.Users.Requests;
 using TileShop.Application.Services.Interfaces;
 using TileShop.Domain.Dtos;
 
@@ -31,6 +31,7 @@ public class UsersController : BaseController
         return Ok(user);
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> CreateUser(CreateUserRequest request)
     {
